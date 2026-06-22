@@ -1,0 +1,332 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;700&display=swap');
+
+:root {
+    --primary: #90EE90; /* Light Green */
+    --primary-dark: #66BB66;
+    --background: #ffffff;
+    --text-main: #121212;
+    --text-muted: #666666;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --shadow: 0 8px 32px 0 rgba(144, 238, 144, 0.2);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --nav-bg: #121212;
+    --btn-text: #121212;
+}
+
+body.dark-mode {
+    --background: #0f172a;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    --nav-bg: #020617;
+    --btn-text: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--background);
+    color: var(--text-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+    transition: background 0.5s ease, color 0.5s ease;
+}
+
+h1, h2, h3, .nav-logo {
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Scroll-to-Top Button */
+#scroll-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--primary);
+    color: var(--text-main);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 2000;
+    transition: var(--transition);
+    border: none;
+    font-size: 1.5rem;
+}
+
+#scroll-top-btn.show {
+    display: flex;
+    animation: bounce 2s infinite;
+}
+
+/* Theme Toggle Component */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#theme-toggle {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    background: var(--primary);
+    color: var(--text-main);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* Header & Nav */
+header {
+    background: var(--background);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.logo-img {
+    height: 50px;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+    transform: rotate(360deg);
+}
+
+.brand-details h1 {
+    font-size: 1.5rem;
+}
+
+.brand-details p {
+    font-size: 0.8rem;
+    color: var(--primary-dark);
+    font-weight: 600;
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid var(--primary);
+    animation: type 3s steps(30) infinite alternate;
+}
+
+@keyframes type {
+    to { width: 100%; }
+}
+
+nav {
+    background: var(--nav-bg);
+    padding: 0.75rem 5%;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    gap: 2.5rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    transition: var(--transition);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+}
+
+.nav-links a.active {
+    background: var(--primary);
+    color: var(--text-main);
+}
+
+.nav-links a:hover {
+    color: var(--primary);
+}
+
+/* Clock Display */
+.live-clock-wrapper {
+    text-align: center;
+    padding: 0.5rem;
+    background: var(--primary);
+    color: var(--text-main);
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Slider Section */
+.hero-slider {
+    position: relative;
+    height: 500px;
+    overflow: hidden;
+    background: #000;
+}
+
+.slide {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+}
+
+.slide-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    width: 80%;
+}
+
+.slide-content h2 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    animation: slideInDown 1s ease-out;
+}
+
+/* Dashboard Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 2rem 5%;
+}
+
+.stat-item {
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-item:hover {
+    transform: scale(1.05) translateY(-10px);
+    box-shadow: 0 15px 45px rgba(0,0,0,0.2);
+}
+
+.stat-value {
+    display: block;
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+/* Features Animation */
+.feature-card {
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.feature-card:hover {
+    background: var(--primary);
+    color: var(--text-main);
+}
+
+/* Notification Panel */
+.notification-panel {
+    position: fixed;
+    right: -400px;
+    top: 100px;
+    width: 350px;
+    height: auto;
+    background: var(--card-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px 0 0 15px;
+    box-shadow: var(--shadow);
+    transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1001;
+    padding: 2rem;
+}
+
+.notification-panel.active {
+    right: 0;
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 0.5rem;
+}
+
+/* Advanced Animations */
+@keyframes slideInDown {
+    from {
+        transform: translate(-50%, -100%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+    40% {transform: translateY(-20px);}
+    60% {transform: translateY(-10px);}
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.pulse { animation: pulse 2s infinite; }
+
+/* Progress Bar Effect */
+.progress-container {
+    width: 100%;
+    background: #eee;
+    height: 10px;
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 5px;
+    width: 0;
+    transition: width 2s ease-in-out;
+}
+
+/* Responsive Fixes */
+@media (max-width: 768px) {
+    .slide-content h2 { font-size: 2rem; }
+    .hero-slider { height: 350px; }
+}

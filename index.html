@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Dashboard | Smart Parking</title>
+    <meta name="description" content="Advanced interactive dashboard for Smart Parking Management System.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Live Clock Display -->
+    <div class="live-clock-wrapper" id="live-clock">Loading Time...</div>
+
+    <header>
+        <div class="header-info">
+            <img src="assets/logo.png" alt="Smart Parking Logo" class="logo-img">
+            <div class="brand-details">
+                <h1>Smart Parking MS</h1>
+                <p>Intelligent, Green, Automated.</p>
+            </div>
+        </div>
+        <div class="theme-switch-wrapper">
+            <button id="theme-toggle">☀️ Light Mode</button>
+            <button id="notify-btn" class="pulse" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">🔔</button>
+            <div class="student-meta">
+                <span><strong>Summerjeet Singh</strong></span>
+                <span>Reg: 2303717620521053</span>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#stats">Dashboard</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#reports">Reports</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notify-panel">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button id="close-notify" style="background:none; border:none; cursor:pointer;">✖</button>
+        </div>
+        <div class="notification-body">
+            <p>🚀 Welcome to Assignment 2!</p>
+            <p>⚠️ Maintenance in Slot B-4 in 10 mins.</p>
+            <p>✅ System update successful.</p>
+        </div>
+    </div>
+
+    <main id="home">
+        <!-- Hero Slider -->
+        <section class="hero-slider">
+            <div class="slide">
+                <img src="assets/bg.png" alt="Smart Parking View">
+                <div class="slide-content">
+                    <h2>Advanced Urban Mobility</h2>
+                    <p>Harnessing AI to optimize city parking ecosystems.</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="assets/slide1.png" alt="High Tech Sensors">
+                <div class="slide-content">
+                    <h2>Precision Monitoring</h2>
+                    <p>Real-time slot tracking with 99.9% accuracy sensors.</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="assets/slide2.png" alt="Mobile App Integration">
+                <div class="slide-content">
+                    <h2>Reservation at Your Fingertips</h2>
+                    <p>Book, Track, and Pay via our seamless mobile experience.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Welcome Banner with Animation -->
+        <section class="hero" style="animation: slideInDown 1.2s ease-out;">
+            <h2>The Future of Intelligent Parking</h2>
+            <p class="description">
+                Elevating the standards of urban infrastructure with automated, sensor-driven parking management.
+            </p>
+            <div class="vision-mission">
+                <article class="glass-card zoom-hover">
+                    <h3>Our Vision</h3>
+                    <p>Zero congestion, zero emissions, seamless arrival.</p>
+                </article>
+                <article class="glass-card zoom-hover">
+                    <h3>Our Mission</h3>
+                    <p>Integrating IoT and AI to solve the global parking crisis for a smarter tomorrow.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Dynamic Statistics -->
+        <section id="stats" class="dashboard-stats">
+            <h2 class="section-title">Operations Overview</h2>
+            <div class="stats-grid">
+                <div class="glass-card stat-item">
+                    <span class="stat-value" data-target="1500">0</span>
+                    <span class="stat-label">Total Users</span>
+                    <div class="progress-container"><div class="progress-bar" id="pb1" style="width: 85%;"></div></div>
+                </div>
+                <div class="glass-card stat-item">
+                    <span class="stat-value" data-target="920">0</span>
+                    <span class="stat-label">Active Slots</span>
+                    <div class="progress-container"><div class="progress-bar" id="pb2" style="width: 60%;"></div></div>
+                </div>
+                <div class="glass-card stat-item">
+                    <span class="stat-value" data-target="25">0</span>
+                    <span class="stat-label">Weekly Revenue ($k)</span>
+                    <div class="progress-container"><div class="progress-bar" id="pb3" style="width: 45%;"></div></div>
+                </div>
+                <div class="glass-card stat-item">
+                    <span class="stat-value" data-target="5800">0</span>
+                    <span class="stat-label">Transactions</span>
+                    <div class="progress-container"><div class="progress-bar" id="pb4" style="width: 90%;"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features & Services with Transitions -->
+        <section id="features" class="content-sections">
+            <div class="features-list">
+                <h2 class="section-title">Core Features</h2>
+                <div class="glass-card feature-card">
+                    <h4>Dynamic Route Guidance</h4>
+                    <p>Integrated GPS guides you to the nearest free spot.</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <h4>AI-Powered Security</h4>
+                    <p>Facial and number plate recognition for safety.</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <h4>Multi-modal Payment</h4>
+                    <p>Blockchain and UPI ready transactions.</p>
+                </div>
+            </div>
+
+            <div id="services" class="services-list">
+                <h2 class="section-title">Smart Services</h2>
+                <div class="glass-card service-panel" style="margin-bottom: 1rem; padding: 1rem;">
+                    <strong>01. Automated Valet</strong>
+                </div>
+                <div class="glass-card service-panel" style="margin-bottom: 1rem; padding: 1rem;">
+                    <strong>02. EV Quick Charge</strong>
+                </div>
+                <div class="glass-card service-panel" style="margin-bottom: 1rem; padding: 1rem;">
+                    <strong>03. Corporate Subscriptions</strong>
+                </div>
+                <div class="glass-card service-panel" style="margin-bottom: 1rem; padding: 1rem;">
+                    <strong>04. Priority Disabled Access</strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registration Form with Validation -->
+        <section class="form-section">
+            <h2 class="section-title" style="display: block; text-align: center;">Join the Network</h2>
+            <form id="registration-form" class="registration-form">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="phone">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <div style="display: flex; gap: 1rem;">
+                        <input type="radio" name="gender" value="male" checked> Male
+                        <input type="radio" name="gender" value="female"> Female
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" id="dob">
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <textarea id="address" rows="2"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="action-btn">Register</button>
+                    <button type="reset" class="action-btn-secondary">Reset</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Module Table -->
+        <section id="reports" class="modules-section">
+            <h2 class="section-title">System Modules</h2>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Module</th><th>Utility</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>SP-01</td><td>AuthHub</td><td>Security Management</td></tr>
+                    <tr><td>SP-02</td><td>GridCtrl</td><td>Live Slot Management</td></tr>
+                    <tr><td>SP-03</td><td>PayFlow</td><td>Financial Transactions</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <p>Email: contact@smartparking.io | Phone: +91 999 888 7777</p>
+        <div class="social-links">
+            <a href="#">LinkedIn</a> | <a href="#">Twitter</a> | <a href="#">GitHub</a>
+        </div>
+        <br>
+        <p>&copy; 2026 Smart Parking Management System | Designed by **Summerjeet Singh** (2303717620521053)</p>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scroll-top-btn">▲</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
