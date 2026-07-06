@@ -209,7 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const name = document.getElementById('name');
         const email = document.getElementById('email');
-        const password = document.getElementById('password');
 
         if (name.value.trim().length < 3) {
             setError(name, 'Name must be at least 3 characters');
@@ -224,13 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
             valid = false;
         } else {
             clearError(email);
-        }
-
-        if (password.value.length < 6) {
-            setError(password, 'Password must be at least 6 characters');
-            valid = false;
-        } else {
-            clearError(password);
         }
 
         if (valid) {
