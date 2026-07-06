@@ -1,148 +1,196 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Dynamic Statistics Counters
-    const counters = document.querySelectorAll('.stat-value');
-    const speed = 200;
+    // 1. Theme Switcher (Light/Dark Mode)
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
 
-    const animateCounters = () => {
-        counters.forEach(counter => {
-            const target = +counter.getAttribute('data-target');
-            const updateCount = () => {
-                const count = +counter.innerText;
-                const inc = target / 50;
-                if (count < target) {
-                    counter.innerText = Math.ceil(count + inc);
-                    setTimeout(updateCount, 20);
-                } else {
-                    counter.innerText = target;
-                }
-            };
-            updateCount();
-        });
-    };
-    
-    // Trigger progress bars
-    const triggerProgress = () => {
-        const pbs = document.querySelectorAll('.progress-bar');
-        pbs.forEach(pb => {
-            const width = pb.style.width;
-            pb.style.width = '0';
-            setTimeout(() => {
-                pb.style.width = width;
-            }, 500);
-        });
+    const setTheme = (isDark) => {
+        if (isDark) {
+            body.classList.add('dark-mode');
+            themeToggle.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                <span>Dark Mode</span>
+            `;
+        } else {
+            body.classList.remove('dark-mode');
+            themeToggle.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                <span>Light Mode</span>
+            `;
+        }
     };
 
-    setTimeout(() => {
-        animateCounters();
-        triggerProgress();
-    }, 1000);
+    themeToggle.addEventListener('click', () => {
+        const willBeDark = !body.classList.contains('dark-mode');
+        localStorage.setItem('theme', willBeDark ? 'dark' : 'light');
+        setTheme(willBeDark);
+    });
 
-    // 2. Real-Time Date and Time
+    // Check saved theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme === 'dark');
+
+    // 2. Dynamic Real-Time Clock
     const updateTime = () => {
         const now = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-        const timeString = now.toLocaleDateString('en-US', options);
-        document.getElementById('live-clock').innerText = timeString;
+        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        document.getElementById('live-clock').innerText = now.toLocaleDateString('en-US', options);
     };
     setInterval(updateTime, 1000);
     updateTime();
 
-    // 3. Theme Switcher (Light/Dark Mode)
-    const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
+    // 3. Interactive Parking Slot Booking Grid
+    const slots = document.querySelectorAll('.parking-slot');
+    const activeSlotsCount = document.getElementById('active-slots-val');
+    const totalUsersVal = document.getElementById('total-users-val');
+    const revenueVal = document.getElementById('revenue-val');
+    const txVal = document.getElementById('tx-val');
 
-    themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
-        const isDark = body.classList.contains('dark-mode');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        themeToggle.innerHTML = isDark ? '🌙 Dark Mode' : '☀️ Light Mode';
+    // Base state data
+    let state = {
+        totalUsers: 1420,
+        activeSlots: Array.from(slots).filter(s => s.classList.contains('available')).length,
+        revenue: 12.4,
+        transactions: 4210
+    };
+
+    const updateStatsDisplay = () => {
+        activeSlotsCount.innerText = state.activeSlots;
+        totalUsersVal.innerText = state.totalUsers;
+        revenueVal.innerText = `$${state.revenue.toFixed(1)}k`;
+        txVal.innerText = state.transactions;
+    };
+
+    slots.forEach(slot => {
+        slot.addEventListener('click', () => {
+            const isAvailable = slot.classList.contains('available');
+            
+            if (isAvailable) {
+                slot.classList.remove('available');
+                slot.classList.add('occupied');
+                slot.querySelector('.slot-status').innerText = 'Occupied';
+                state.activeSlots--;
+                state.transactions++;
+                state.revenue += 0.2;
+                addNotification(`Slot ${slot.dataset.slot} booked successfully!`, 'success');
+            } else {
+                slot.classList.remove('occupied');
+                slot.classList.add('available');
+                slot.querySelector('.slot-status').innerText = 'Available';
+                state.activeSlots++;
+                addNotification(`Slot ${slot.dataset.slot} is now vacant.`, 'warning');
+            }
+            updateStatsDisplay();
+            updateChart();
+        });
     });
 
-    // Check saved theme
-    if (localStorage.getItem('theme') === 'dark') {
-        body.classList.add('dark-mode');
-        themeToggle.innerHTML = '🌙 Dark Mode';
-    }
-
-    // 4. Image Slider
-    const slides = document.querySelectorAll('.slide');
-    let currentSlide = 0;
-
-    const showSlide = (n) => {
-        slides.forEach(s => s.style.display = 'none');
-        slides[n].style.display = 'block';
-    };
-
-    const nextSlide = () => {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    };
-
-    if(slides.length > 0) {
-        showSlide(0);
-        setInterval(nextSlide, 5000); // Change every 5 seconds
-    }
-
-    // 5. Notification Panel
+    // 4. Notifications Panel Toggle & Dispatcher
     const notifyBtn = document.getElementById('notify-btn');
     const notifyPanel = document.getElementById('notify-panel');
     const closeNotify = document.getElementById('close-notify');
+    const notifyList = document.getElementById('notification-list');
+    const notifyBadge = document.querySelector('.badge');
+
+    let unreadCount = 2;
 
     notifyBtn.addEventListener('click', () => {
         notifyPanel.classList.toggle('active');
+        unreadCount = 0;
+        notifyBadge.style.display = 'none';
     });
 
     closeNotify.addEventListener('click', () => {
         notifyPanel.classList.remove('active');
     });
 
-    // 6. Form Validation
-    const regForm = document.getElementById('registration-form');
-    regForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        let isValid = true;
-        const inputs = regForm.querySelectorAll('input[required]');
+    const addNotification = (text, type = 'success') => {
+        const item = document.createElement('div');
+        item.className = `notification-item ${type}`;
         
-        inputs.forEach(input => {
-            if (!input.value.trim()) {
-                isValid = false;
-                input.style.borderColor = 'red';
-                showError(input, 'This field is required');
-            } else {
-                input.style.borderColor = '#ddd';
-                removeError(input);
-            }
-        });
-
-        if (isValid) {
-            alert('Registration Successful!');
-            regForm.reset();
+        let svgIcon = '';
+        if (type === 'success') {
+            svgIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        } else if (type === 'warning') {
+            svgIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
+        } else {
+            svgIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
         }
+
+        item.innerHTML = `
+            <div class="notify-icon-badge">
+                ${svgIcon}
+            </div>
+            <div class="notify-details">
+                <span class="notify-time">${new Date().toLocaleTimeString()}</span>
+                <p>${text}</p>
+            </div>
+        `;
+        notifyList.insertBefore(item, notifyList.firstChild);
+        
+        unreadCount++;
+        notifyBadge.innerText = unreadCount;
+        notifyBadge.style.display = 'inline-block';
+        
+        // Remove oldest if there are too many
+        if (notifyList.children.length > 5) {
+            notifyList.removeChild(notifyList.lastChild);
+        }
+    };
+
+    // 5. Dynamic SVG Analytics Chart
+    const svgPath = document.getElementById('chart-path');
+    let chartData = [30, 45, 35, 60, 50, 70, 85]; // Initial occupancy rate percentage
+
+    const updateChart = () => {
+        const width = 500;
+        const height = 150;
+        const padding = 10;
+        
+        // Add random slight variation or base on slot count
+        const currentPercentage = Math.round(( (slots.length - state.activeSlots) / slots.length ) * 100);
+        chartData.push(currentPercentage);
+        if (chartData.length > 8) chartData.shift();
+
+        const step = (width - padding * 2) / (chartData.length - 1);
+        let pathString = `M ${padding} ${height - (chartData[0] / 100) * (height - padding * 2)}`;
+
+        for (let i = 1; i < chartData.length; i++) {
+            const x = padding + i * step;
+            const y = height - (chartData[i] / 100) * (height - padding * 2);
+            pathString += ` L ${x} ${y}`;
+        }
+
+        svgPath.setAttribute('d', pathString);
+    };
+    updateChart();
+
+    // 6. Carousel Slider
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.slider-dot');
+    let activeSlide = 0;
+
+    const changeSlide = (index) => {
+        slides.forEach(s => s.classList.remove('active'));
+        dots.forEach(d => d.classList.remove('active'));
+        
+        slides[index].classList.add('active');
+        dots[index].classList.add('active');
+        activeSlide = index;
+    };
+
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => changeSlide(index));
     });
 
-    const showError = (input, msg) => {
-        let parent = input.parentElement;
-        let error = parent.querySelector('.error-msg');
-        if (!error) {
-            error = document.createElement('span');
-            error.className = 'error-msg';
-            error.style.color = 'red';
-            error.style.fontSize = '0.75rem';
-            parent.appendChild(error);
-        }
-        error.innerText = msg;
-    };
-
-    const removeError = (input) => {
-        let parent = input.parentElement;
-        let error = parent.querySelector('.error-msg');
-        if (error) error.remove();
-    };
+    setInterval(() => {
+        const next = (activeSlide + 1) % slides.length;
+        changeSlide(next);
+    }, 6000);
 
     // 7. Scroll to Top
     const scrollTopBtn = document.getElementById('scroll-top-btn');
     window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
+        if (window.scrollY > 300) {
             scrollTopBtn.classList.add('show');
         } else {
             scrollTopBtn.classList.remove('show');
@@ -153,25 +201,266 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Active Nav Highlighting
-    const sections = document.querySelectorAll('section');
-    const navLinks = document.querySelectorAll('.nav-links a');
+    // 8. Form Validation
+    const form = document.getElementById('registration-form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let valid = true;
+
+        const name = document.getElementById('name');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+
+        if (name.value.trim().length < 3) {
+            setError(name, 'Name must be at least 3 characters');
+            valid = false;
+        } else {
+            clearError(name);
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email.value)) {
+            setError(email, 'Please enter a valid email');
+            valid = false;
+        } else {
+            clearError(email);
+        }
+
+        if (password.value.length < 6) {
+            setError(password, 'Password must be at least 6 characters');
+            valid = false;
+        } else {
+            clearError(password);
+        }
+
+        if (valid) {
+            addNotification(`Successfully registered user: ${name.value}`, 'info');
+            alert('Registration completed successfully!');
+            form.reset();
+        }
+    });
+
+    const setError = (input, msg) => {
+        const group = input.closest('.form-group');
+        group.classList.add('error');
+        let errorSpan = group.querySelector('.error-message');
+        if (!errorSpan) {
+            errorSpan = document.createElement('span');
+            errorSpan.className = 'error-message';
+            group.appendChild(errorSpan);
+        }
+        errorSpan.innerText = msg;
+    };
+
+    const clearError = (input) => {
+        const group = input.closest('.form-group');
+        group.classList.remove('error');
+        const errorSpan = group.querySelector('.error-message');
+        if (errorSpan) errorSpan.remove();
+    };
+
+    // Active Navigation Highlight
+    const menuLinks = document.querySelectorAll('.nav-links a');
+    const sections = document.querySelectorAll('section[id]');
 
     window.addEventListener('scroll', () => {
-        let current = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (pageYOffset >= (sectionTop - 200)) {
-                current = section.getAttribute('id');
+        let currentSec = '';
+        sections.forEach(sec => {
+            const top = sec.offsetTop - 150;
+            if (scrollY >= top) {
+                currentSec = sec.getAttribute('id');
             }
         });
 
-        navLinks.forEach(link => {
+        menuLinks.forEach(link => {
             link.classList.remove('active');
-            if (link.getAttribute('href').includes(current)) {
+            if (link.getAttribute('href') === `#${currentSec}`) {
                 link.classList.add('active');
             }
         });
+    });
+
+    // 9. Interactive Service Modals ("Click Button Going Inside")
+    const modal = document.getElementById('service-modal');
+    const modalContent = document.getElementById('modal-body-content');
+    const closeModal = document.getElementById('close-modal');
+    const serviceButtons = document.querySelectorAll('.service-action-btn');
+
+    const serviceSimulations = {
+        vip: {
+            title: "Premium VIP Spaces Portal",
+            desc: "Secure high-priority, extra-wide bays closest to the building entry points.",
+            html: `
+                <div class="modal-sim-box">
+                    <h3>VIP Parking Gateway</h3>
+                    <p>Enter your details below to bypass standard queue validation and claim a VIP bay.</p>
+                    <div class="modal-sim-interactive">
+                        <div class="modal-input-group">
+                            <label>License Plate</label>
+                            <input type="text" id="vip-plate" placeholder="e.g. TX-99-VIP" style="text-transform: uppercase;">
+                        </div>
+                        <div class="modal-input-group">
+                            <label>Lobby Access Preference</label>
+                            <select id="vip-lobby">
+                                <option value="North Entrance">North Tower Lobby</option>
+                                <option value="South Entrance">South Tower Lobby</option>
+                                <option value="Executive Suites">Executive Lift Portal</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="submit-vip-booking" style="width: 100%;">Confirm Priority Space</button>
+                    </div>
+                </div>
+            `,
+            init: () => {
+                document.getElementById('submit-vip-booking').addEventListener('click', () => {
+                    const plate = document.getElementById('vip-plate').value.trim();
+                    const lobby = document.getElementById('vip-lobby').value;
+                    if (!plate) {
+                        alert("Please enter your vehicle license plate.");
+                        return;
+                    }
+                    addNotification(`VIP Space Reserved for vehicle [${plate.toUpperCase()}] near ${lobby}.`, 'success');
+                    alert(`VIP Space Confirmed!\nVehicle: ${plate.toUpperCase()}\nAccess Point: ${lobby}`);
+                    modal.classList.remove('active');
+                });
+            }
+        },
+        ev: {
+            title: "EV Supercharger Controller",
+            desc: "Manage high-voltage charging units directly from your mobile console.",
+            html: `
+                <div class="modal-sim-box">
+                    <h3>Supercharged EV System</h3>
+                    <p>Connect your vehicle's charge port to initiate fast charging in Zone E.</p>
+                    <div class="modal-sim-interactive">
+                        <div class="modal-input-group">
+                            <label>Select Station Port</label>
+                            <select id="ev-port">
+                                <option value="Port E-01 (150kW)">Port E-01 (150kW Ultra Fast)</option>
+                                <option value="Port E-02 (150kW)">Port E-02 (150kW Ultra Fast)</option>
+                                <option value="Port E-03 (50kW)">Port E-03 (50kW Standard Fast)</option>
+                            </select>
+                        </div>
+                        <div class="modal-input-group">
+                            <label>Target Charge Level (%)</label>
+                            <input type="range" id="ev-target" min="50" max="100" value="80" style="accent-color: var(--primary);">
+                            <span style="text-align: center; font-weight: 700; margin-top: 5px;" id="range-val">80%</span>
+                        </div>
+                        <button class="btn btn-primary" id="initiate-ev-charge" style="width: 100%;">Initiate Charge Hook</button>
+                    </div>
+                </div>
+            `,
+            init: () => {
+                const range = document.getElementById('ev-target');
+                const rangeVal = document.getElementById('range-val');
+                range.addEventListener('input', () => {
+                    rangeVal.innerText = `${range.value}%`;
+                });
+
+                document.getElementById('initiate-ev-charge').addEventListener('click', () => {
+                    const port = document.getElementById('ev-port').value;
+                    addNotification(`EV Fast Charge Hook initiated on ${port} up to ${range.value}%.`, 'info');
+                    alert(`Charging session successfully queued on ${port}!\nTarget limit set to ${range.value}%.`);
+                    modal.classList.remove('active');
+                });
+            }
+        },
+        fleet: {
+            title: "Corporate Fleet Booking Portal",
+            desc: "Allocate batches of slots dynamically under corporate accounts.",
+            html: `
+                <div class="modal-sim-box">
+                    <h3>Corporate Allocation System</h3>
+                    <p>Input corporate identification keys to reserve block slots for company events.</p>
+                    <div class="modal-sim-interactive">
+                        <div class="modal-input-group">
+                            <label>Corporate Account Code</label>
+                            <input type="text" id="corp-code" placeholder="e.g. CORP-ALPHATECH-2026">
+                        </div>
+                        <div class="modal-input-group">
+                            <label>Required Slot Batch Size</label>
+                            <input type="number" id="corp-batch" min="2" max="15" value="5">
+                        </div>
+                        <button class="btn btn-primary" id="confirm-corp-booking" style="width: 100%;">Reserve Batch Blocks</button>
+                    </div>
+                </div>
+            `,
+            init: () => {
+                document.getElementById('confirm-corp-booking').addEventListener('click', () => {
+                    const code = document.getElementById('corp-code').value.trim();
+                    const batch = document.getElementById('corp-batch').value;
+                    if (!code) {
+                        alert("A valid corporate identification code is required.");
+                        return;
+                    }
+                    addNotification(`Corporate Account [${code.toUpperCase()}] reserved ${batch} slots in Zone D.`, 'success');
+                    alert(`Corporate block allocation successful!\nReserved ${batch} spaces in Zone D under ${code.toUpperCase()}.`);
+                    modal.classList.remove('active');
+                });
+            }
+        },
+        valet: {
+            title: "Valet Dispatch Console",
+            desc: "Initiate smart autonomous fetching for parked vehicles.",
+            html: `
+                <div class="modal-sim-box">
+                    <h3>Autonomous Valet Fetch</h3>
+                    <p>Request vehicle dispatching to your chosen pick-up lobby.</p>
+                    <div class="modal-sim-interactive">
+                        <div class="modal-input-group">
+                            <label>Your Vehicle Registration ID</label>
+                            <input type="text" id="valet-reg" placeholder="e.g. KA-03-MR-1234">
+                        </div>
+                        <div class="modal-input-group">
+                            <label>Pickup Destination Lobby</label>
+                            <select id="valet-lobby">
+                                <option value="Main Central Port">Main Central Lobby</option>
+                                <option value="VIP South Gate">VIP South Gate Lobby</option>
+                                <option value="Skybridge Entrance">3rd Floor Skybridge Port</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="request-valet-fetch" style="width: 100%;">Dispatch Valet Team</button>
+                    </div>
+                </div>
+            `,
+            init: () => {
+                document.getElementById('request-valet-fetch').addEventListener('click', () => {
+                    const reg = document.getElementById('valet-reg').value.trim();
+                    const lobby = document.getElementById('valet-lobby').value;
+                    if (!reg) {
+                        alert("Please specify your vehicle registration number.");
+                        return;
+                    }
+                    addNotification(`Valet dispatch request submitted for vehicle [${reg.toUpperCase()}].`, 'warning');
+                    alert(`Valet Dispatch Requested!\nVehicle ${reg.toUpperCase()} will be delivered to the ${lobby} shortly.`);
+                    modal.classList.remove('active');
+                });
+            }
+        }
+    };
+
+    serviceButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const card = e.target.closest('.service-card');
+            const serviceKey = card.dataset.service;
+            const sim = serviceSimulations[serviceKey];
+            
+            if (sim) {
+                modalContent.innerHTML = sim.html;
+                modal.classList.add('active');
+                sim.init();
+            }
+        });
+    });
+
+    closeModal.addEventListener('click', () => {
+        modal.classList.remove('active');
+    });
+
+    // Close on overlay backdrop click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
     });
 });
