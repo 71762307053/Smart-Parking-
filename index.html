@@ -561,6 +561,51 @@
             </div>
         </section>
 
+        <!-- Advanced Features: Dynamic Fee Calculator & QR Code -->
+        <section id="advanced-features" class="hero-welcome" style="padding: 4rem 6%; border-top: 1px solid var(--border-color);">
+            <h2 class="section-title">Smart Booking & Digital Passes</h2>
+            <p class="description">Estimate your parking fees in real-time and generate a digital QR code parking ticket for seamless entry.</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 900px; margin: 0 auto; text-align: left;">
+                
+                <!-- Fee Calculator Box -->
+                <div class="glass-card">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--primary);">1. Calculate Fee</h3>
+                    
+                    <div class="form-group">
+                        <label for="vehicle-type">Select Vehicle Type</label>
+                        <select id="vehicle-type">
+                            <option value="car">Standard Car (Base Rate: $5/hr)</option>
+                            <option value="ev">Electric Vehicle (Discounted: $3/hr)</option>
+                            <option value="bike">Motorcycle ($2/hr)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="parking-duration">Duration (Hours): <span id="duration-val" style="color: var(--primary); font-weight: bold;">2</span></label>
+                        <input type="range" id="parking-duration" min="1" max="24" value="2" style="accent-color: var(--primary);">
+                    </div>
+
+                    <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px dashed var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 600; color: var(--text-secondary);">Estimated Total:</span>
+                        <span id="calculated-fee" style="font-size: 2rem; font-weight: 800; color: var(--text-primary);">$10.00</span>
+                    </div>
+                </div>
+
+                <!-- Digital Ticket / QR Code Box -->
+                <div class="glass-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                    <h3 style="margin-bottom: 1rem; color: var(--primary);">2. Generate Digital Pass</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Issue a digital QR code ticket encoded with your billing parameters for autonomous gate access.</p>
+                    
+                    <button id="generate-qr-btn" class="btn btn-primary" style="width: 100%; max-width: 250px; margin-bottom: 1.5rem;">Generate QR Pass</button>
+                    
+                    <!-- QR Code Canvas Container -->
+                    <div id="qrcode-container" style="background-color: white; padding: 10px; border-radius: 8px; display: none;"></div>
+                </div>
+
+            </div>
+        </section>
+
         <!-- Contact Section -->
         <section id="contact" class="contact-section">
             <h2 class="section-title" style="text-align: center; margin: 0 auto 1rem; display: block; width: fit-content;">Connect With Us</h2>
@@ -621,6 +666,8 @@
         </div>
     </div>
 
+    <!-- External Library for QR Code Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

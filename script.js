@@ -544,4 +544,67 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { storageOutput.style.display = 'none'; }, 2000);
         addNotification("Web Storage data has been cleared.", "info");
     });
+
+    // ==========================================
+    // ADVANCED FEATURES: Fee Calculator & QR Code
+    // ==========================================
+    const vehicleTypeSelect = document.getElementById('vehicle-type');
+    const parkingDurationInput = document.getElementById('parking-duration');
+    const durationValText = document.getElementById('duration-val');
+    const calculatedFeeText = document.getElementById('calculated-fee');
+    const generateQrBtn = document.getElementById('generate-qr-btn');
+    const qrContainer = document.getElementById('qrcode-container');
+
+    const rates = {
+        car: 5,
+        ev: 3,
+        bike: 2
+    };
+
+    const updateFee = () => {
+        const type = vehicleTypeSelect.value;
+        const hours = parseInt(parkingDurationInput.value);
+        durationValText.innerText = hours;
+        
+        let total = rates[type] * hours;
+        
+        // Optional: Discount for long stays (e.g. over 8 hours gets 10% off)
+        if (hours >= 8) {
+            total = total * 0.9;
+        }
+
+        calculatedFeeText.innerText = `$${total.toFixed(2)}`;
+    };
+
+    vehicleTypeSelect.addEventListener('change', updateFee);
+    parkingDurationInput.addEventListener('input', updateFee);
+    updateFee(); // Initialize on load
+
+    generateQrBtn.addEventListener('click', () => {
+        // Clear previous QR code if it exists
+        qrContainer.innerHTML = '';
+        
+        const type = vehicleTypeSelect.value.toUpperCase();
+        const hours = parkingDurationInput.value;
+        const total = calculatedFeeText.innerText;
+        const ticketID = 'TK-' + Math.floor(Math.random() * 90000 + 10000);
+        
+        // Data payload to encode in the QR code
+        const qrData = `SmartParking Pass\nID: ${ticketID}\nVehicle: ${type}\nDuration: ${hours} hrs\nTotal: ${total}`;
+        
+        // Generate new QR code
+        new QRCode(qrContainer, {
+            text: qrData,
+            width: 150,
+            height: 150,
+            colorDark : "#0f172a",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+        
+        // Display it
+        qrContainer.style.display = 'block';
+        addNotification(`QR Ticket ${ticketID} generated successfully!`, 'success');
+    });
+
 });
