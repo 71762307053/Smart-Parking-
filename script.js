@@ -455,4 +455,93 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.classList.remove('active');
         }
     });
+
+    // ==========================================
+    // ASSIGNMENT 4: Drag and Drop Implementation
+    // ==========================================
+    const dragItems = document.querySelectorAll('.drag-item');
+    const dropZone = document.getElementById('drop-zone');
+
+    dragItems.forEach(item => {
+        item.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', e.target.id);
+            e.dataTransfer.effectAllowed = 'move';
+        });
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault(); // Necessary to allow dropping
+        e.dataTransfer.dropEffect = 'move';
+        dropZone.classList.add('drag-over');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('drag-over');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
+        const id = e.dataTransfer.getData('text/plain');
+        const draggableElement = document.getElementById(id);
+        
+        if (draggableElement) {
+            // Append the dragged item to the drop zone
+            dropZone.innerHTML = ''; // Clear the "Drop Permit Here" text
+            dropZone.appendChild(draggableElement);
+            
+            // Add a visual success notification
+            addNotification(`Successfully assigned ${draggableElement.innerText.trim()} to Slot A-1!`, 'success');
+        }
+    });
+
+    // ==========================================
+    // ASSIGNMENT 4: Web Storage Implementation
+    // ==========================================
+    const btnSaveData = document.getElementById('btn-save-data');
+    const btnRetrieveData = document.getElementById('btn-retrieve-data');
+    const btnClearData = document.getElementById('btn-clear-data');
+    const localInput = document.getElementById('local-data');
+    const sessionInput = document.getElementById('session-data');
+    const storageOutput = document.getElementById('storage-output');
+
+    // Save Data
+    btnSaveData.addEventListener('click', () => {
+        const localVal = localInput.value.trim();
+        const sessionVal = sessionInput.value.trim();
+        
+        if(localVal) {
+            localStorage.setItem('preferredZone', localVal);
+        }
+        if(sessionVal) {
+            sessionStorage.setItem('sessionTag', sessionVal);
+        }
+        
+        addNotification("User preferences saved to Web Storage.", "success");
+        localInput.value = '';
+        sessionInput.value = '';
+    });
+
+    // Retrieve Data
+    btnRetrieveData.addEventListener('click', () => {
+        const savedLocal = localStorage.getItem('preferredZone') || 'None Set';
+        const savedSession = sessionStorage.getItem('sessionTag') || 'None Set';
+        
+        storageOutput.innerHTML = `
+            <strong>Retrieved Data:</strong><br>
+            <span style="color: var(--primary);">Local Storage (Preferred Zone):</span> ${savedLocal}<br>
+            <span style="color: #3b82f6;">Session Storage (Session Tag):</span> ${savedSession}
+        `;
+        storageOutput.style.display = 'block';
+    });
+
+    // Clear Data
+    btnClearData.addEventListener('click', () => {
+        localStorage.removeItem('preferredZone');
+        sessionStorage.removeItem('sessionTag');
+        
+        storageOutput.innerHTML = `<strong>Data Cleared successfully!</strong>`;
+        setTimeout(() => { storageOutput.style.display = 'none'; }, 2000);
+        addNotification("Web Storage data has been cleared.", "info");
+    });
 });

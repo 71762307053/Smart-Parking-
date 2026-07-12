@@ -1163,3 +1163,54 @@ footer {
     background-color: var(--bg-panel);
     color: var(--text-primary);
 }
+
+/* Drag and Drop Styling */
+.drag-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 45%;
+}
+
+.drag-item {
+    background-color: var(--bg-panel);
+    border: 2px dashed var(--border-color);
+    padding: 1rem;
+    border-radius: var(--radius);
+    text-align: center;
+    cursor: grab;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.drag-item:active {
+    cursor: grabbing;
+    opacity: 0.7;
+    transform: scale(0.95);
+}
+
+.drop-container {
+    width: 45%;
+}
+
+.drop-zone {
+    background-color: var(--bg-app);
+    border: 2px dashed var(--border-color);
+    padding: 2.5rem 1rem;
+    border-radius: var(--radius);
+    text-align: center;
+    color: var(--text-secondary);
+    font-weight: 600;
+    transition: var(--transition);
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.drop-zone.drag-over {
+    background-color: var(--primary-glow);
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: scale(1.02);
+}

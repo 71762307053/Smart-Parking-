@@ -54,10 +54,10 @@
             <li><a href="#home" class="active">Home</a></li>
             <li><a href="#dashboard">Dashboard</a></li>
             <li><a href="#features">Features</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#reports">Reports</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#storage">Storage</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li><a href="#logout" onclick="alert('System logged out successfully.')">Logout</a></li>
+            <li><a href="#help">Help</a></li>
         </ul>
     </nav>
 
@@ -352,6 +352,76 @@
                     </div>
                 </div>
             </div>
+        </section>
+
+        <!-- About Section (For Navigation Requirement) -->
+        <section id="about" class="hero-welcome" style="padding: 2rem 6%;">
+            <h2 class="section-title">About Smart Parking</h2>
+            <p class="description" style="margin-bottom: 0;">We are dedicated to providing the best urban mobility solutions with smart sensor arrays and robust data management.</p>
+        </section>
+
+        <!-- Assignment 4: Drag & Drop + Web Storage -->
+        <section id="storage" class="features-services" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            
+            <!-- Drag and Drop Panel -->
+            <article class="glass-card">
+                <h2 class="section-title" style="font-size: 1.3rem;">Permit Assigner (Drag & Drop)</h2>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Drag the parking permit and drop it into the designated vehicle slot to assign it.</p>
+                
+                <div style="display: flex; gap: 2rem; justify-content: space-between; align-items: flex-start;">
+                    <!-- Drag Source -->
+                    <div class="drag-container">
+                        <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem;">Available Permits</h4>
+                        <div id="drag-item-1" class="drag-item" draggable="true">
+                            <span>⭐ VIP Permit</span>
+                        </div>
+                        <div id="drag-item-2" class="drag-item" draggable="true" style="background-color: var(--primary); color: #fff;">
+                            <span>🚗 Standard Permit</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Drop Target -->
+                    <div class="drop-container">
+                        <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem;">Target Slot A-1</h4>
+                        <div id="drop-zone" class="drop-zone">
+                            Drop Permit Here
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Web Storage Panel -->
+            <aside class="glass-card">
+                <h2 class="section-title" style="font-size: 1.3rem;">User Preferences (Web Storage)</h2>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Save your permanent preferred zone and temporary session ID using HTML5 Web Storage.</p>
+                
+                <div class="form-group">
+                    <label for="local-data">Preferred Zone (Local Storage)</label>
+                    <input type="text" id="local-data" placeholder="e.g. Zone A">
+                </div>
+                
+                <div class="form-group">
+                    <label for="session-data">Temporary Session Tag (Session Storage)</label>
+                    <input type="text" id="session-data" placeholder="e.g. Session-9042">
+                </div>
+
+                <div class="form-actions" style="gap: 0.5rem; margin-top: 1rem;">
+                    <button id="btn-save-data" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Save Data</button>
+                    <button id="btn-retrieve-data" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Retrieve Data</button>
+                    <button id="btn-clear-data" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem; color: var(--danger);">Clear Data</button>
+                </div>
+                
+                <div id="storage-output" style="margin-top: 1rem; padding: 0.75rem; border-radius: 8px; background-color: var(--bg-app); font-size: 0.85rem; color: var(--text-primary); display: none;">
+                    <!-- Retrieved data will be displayed here -->
+                </div>
+            </aside>
+            
+        </section>
+
+        <!-- Help Section (For Navigation Requirement) -->
+        <section id="help" class="contact-section" style="padding-top: 2rem;">
+            <h2 class="section-title" style="text-align: center; margin: 0 auto 1rem; display: block; width: fit-content;">Help & Support Center</h2>
+            <p style="text-align: center; color: var(--text-secondary);">Find FAQs, user manuals, and ticketing support here to navigate our Smart Parking System effectively.</p>
         </section>
 
         <!-- Registration Form (Advanced HTML5 Elements) -->
