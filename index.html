@@ -360,59 +360,143 @@
             <p class="description" style="margin-bottom: 0;">We are dedicated to providing the best urban mobility solutions with smart sensor arrays and robust data management.</p>
         </section>
 
-        <!-- Assignment 4: Drag & Drop + Web Storage -->
-        <section id="storage" class="features-services" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <!-- Assignment 4: Drag & Drop + Web Storage (Enhanced) -->
+        <section id="storage" class="features-services" style="display: flex; flex-direction: column; gap: 3rem; padding: 4rem 6%;">
             
-            <!-- Drag and Drop Panel -->
-            <article class="glass-card">
-                <h2 class="section-title" style="font-size: 1.3rem;">Permit Assigner (Drag & Drop)</h2>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Drag the parking permit and drop it into the designated vehicle slot to assign it.</p>
+            <!-- Drag and Drop Panel (Enhanced) -->
+            <article class="glass-card" style="width: 100%;">
+                <h2 class="section-title" style="font-size: 1.5rem; text-align: left;">Permit Assigner (Advanced Drag & Drop)</h2>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem;">Drag a parking permit and drop it into a specific vehicle slot to assign it.</p>
                 
-                <div style="display: flex; gap: 2rem; justify-content: space-between; align-items: flex-start;">
-                    <!-- Drag Source -->
-                    <div class="drag-container">
-                        <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem;">Available Permits</h4>
-                        <div id="drag-item-1" class="drag-item" draggable="true">
-                            <span>⭐ VIP Permit</span>
-                        </div>
-                        <div id="drag-item-2" class="drag-item" draggable="true" style="background-color: var(--primary); color: #fff;">
-                            <span>🚗 Standard Permit</span>
+                <div style="display: flex; gap: 3rem; flex-wrap: wrap; justify-content: space-between;">
+                    
+                    <!-- Drag Source Container -->
+                    <div class="drag-container" style="flex: 1; min-width: 250px;">
+                        <h4 style="margin-bottom: 1rem; font-size: 1rem; color: var(--primary);">1. Available Permits</h4>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <!-- Permit 1 -->
+                            <div id="permit-vip" class="drag-item permit-vip" draggable="true">
+                                <span>⭐ VIP Permit</span>
+                            </div>
+                            <!-- Permit 2 -->
+                            <div id="permit-std" class="drag-item permit-std" draggable="true">
+                                <span>🚗 Standard Permit</span>
+                            </div>
+                            <!-- Permit 3 -->
+                            <div id="permit-ev" class="drag-item permit-ev" draggable="true">
+                                <span>⚡ EV Permit</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- Drop Target -->
-                    <div class="drop-container">
-                        <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem;">Target Slot A-1</h4>
-                        <div id="drop-zone" class="drop-zone">
-                            Drop Permit Here
+                    <!-- Drop Target Container (5 Zones) -->
+                    <div class="drop-container" style="flex: 2; min-width: 300px;">
+                        <h4 style="margin-bottom: 1rem; font-size: 1rem; color: var(--primary);">2. Parking Slots</h4>
+                        <div class="parking-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem;">
+                            
+                            <!-- Slot A1 -->
+                            <div id="slot-a1" class="drop-zone" data-slot="A1">
+                                <span class="slot-label">Slot A1</span>
+                            </div>
+                            <!-- Slot A2 -->
+                            <div id="slot-a2" class="drop-zone" data-slot="A2">
+                                <span class="slot-label">Slot A2</span>
+                            </div>
+                            <!-- Slot A3 -->
+                            <div id="slot-a3" class="drop-zone" data-slot="A3">
+                                <span class="slot-label">Slot A3</span>
+                            </div>
+                            <!-- Slot B1 -->
+                            <div id="slot-b1" class="drop-zone" data-slot="B1">
+                                <span class="slot-label">Slot B1</span>
+                            </div>
+                            <!-- Slot B2 -->
+                            <div id="slot-b2" class="drop-zone" data-slot="B2">
+                                <span class="slot-label">Slot B2</span>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
             </article>
 
-            <!-- Web Storage Panel -->
-            <aside class="glass-card">
-                <h2 class="section-title" style="font-size: 1.3rem;">User Preferences (Web Storage)</h2>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Save your permanent preferred zone and temporary session ID using HTML5 Web Storage.</p>
+            <!-- Web Storage Panel (Enhanced) -->
+            <aside class="glass-card" style="width: 100%;">
+                <h2 class="section-title" style="font-size: 1.5rem; text-align: left;">User Data Manager (Web Storage)</h2>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem;">Manage driver and session details using HTML5 Local and Session Storage APIs.</p>
                 
-                <div class="form-group">
-                    <label for="local-data">Preferred Zone (Local Storage)</label>
-                    <input type="text" id="local-data" placeholder="e.g. Zone A">
-                </div>
-                
-                <div class="form-group">
-                    <label for="session-data">Temporary Session Tag (Session Storage)</label>
-                    <input type="text" id="session-data" placeholder="e.g. Session-9042">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                    
+                    <!-- Local Storage Form -->
+                    <div style="padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; background: rgba(0,0,0,0.2);">
+                        <h4 style="margin-bottom: 1rem; color: var(--primary);">Permanent Data (Local Storage)</h4>
+                        
+                        <div class="form-group">
+                            <label for="driver-name">Driver Name</label>
+                            <input type="text" id="driver-name" placeholder="e.g. Summerjeet">
+                        </div>
+                        <div class="form-group">
+                            <label for="vehicle-number">Vehicle Number</label>
+                            <input type="text" id="vehicle-number" placeholder="e.g. KA-03-MR-1234">
+                        </div>
+                        <div class="form-group">
+                            <label for="preferred-zone">Preferred Parking Zone</label>
+                            <select id="preferred-zone">
+                                <option value="Zone A (Standard)">Zone A (Standard)</option>
+                                <option value="Zone B (VIP)">Zone B (VIP)</option>
+                                <option value="Zone C (EV)">Zone C (EV Charging)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Session Storage Form -->
+                    <div style="padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; background: rgba(0,0,0,0.2);">
+                        <h4 style="margin-bottom: 1rem; color: #3b82f6;">Temporary Data (Session Storage)</h4>
+                        
+                        <div class="form-group">
+                            <label for="current-slot">Current Parking Slot</label>
+                            <input type="text" id="current-slot" placeholder="e.g. Slot A1">
+                        </div>
+                        <div class="form-group">
+                            <label for="session-id">Parking Session ID</label>
+                            <input type="text" id="session-id" placeholder="e.g. SESS-88992">
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-actions" style="gap: 0.5rem; margin-top: 1rem;">
-                    <button id="btn-save-data" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Save Data</button>
-                    <button id="btn-retrieve-data" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Retrieve Data</button>
-                    <button id="btn-clear-data" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem; color: var(--danger);">Clear Data</button>
+                <!-- Action Buttons -->
+                <div class="form-actions" style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2rem;">
+                    <button id="btn-save" class="btn btn-primary" style="padding: 0.6rem 1.5rem;">Save Data</button>
+                    <button id="btn-retrieve" class="btn btn-secondary" style="padding: 0.6rem 1.5rem;">Retrieve Data</button>
+                    <button id="btn-update" class="btn btn-secondary" style="padding: 0.6rem 1.5rem; border-color: var(--primary); color: var(--primary);">Update Data</button>
+                    <button id="btn-clear" class="btn btn-secondary" style="padding: 0.6rem 1.5rem; background-color: var(--danger-light); color: var(--danger); border-color: var(--danger);">Clear Data</button>
                 </div>
                 
-                <div id="storage-output" style="margin-top: 1rem; padding: 0.75rem; border-radius: 8px; background-color: var(--bg-app); font-size: 0.85rem; color: var(--text-primary); display: none;">
-                    <!-- Retrieved data will be displayed here -->
+                <!-- Professional Data Display Card -->
+                <div id="data-display-card" style="display: none; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--primary); background: linear-gradient(145deg, var(--bg-panel), var(--bg-app)); box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                    <h4 style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1rem; color: var(--text-primary);">Stored Information Profile</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 0.2rem;">Driver Name</p>
+                            <strong id="display-driver" style="color: var(--primary);">-</strong>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 0.2rem;">Vehicle Number</p>
+                            <strong id="display-vehicle" style="color: var(--primary);">-</strong>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 0.2rem;">Preferred Zone</p>
+                            <strong id="display-zone" style="color: var(--primary);">-</strong>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 0.2rem;">Current Slot</p>
+                            <strong id="display-slot" style="color: #3b82f6;">-</strong>
+                        </div>
+                        <div style="grid-column: span 2;">
+                            <p style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 0.2rem;">Session ID</p>
+                            <strong id="display-session" style="color: #3b82f6;">-</strong>
+                        </div>
+                    </div>
                 </div>
             </aside>
             

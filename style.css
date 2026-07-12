@@ -1164,23 +1164,21 @@ footer {
     color: var(--text-primary);
 }
 
-/* Drag and Drop Styling */
+/* Drag and Drop Styling (Enhanced) */
 .drag-container {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    width: 45%;
 }
 
 .drag-item {
-    background-color: var(--bg-panel);
-    border: 2px dashed var(--border-color);
     padding: 1rem;
     border-radius: var(--radius);
     text-align: center;
     cursor: grab;
     font-weight: 600;
     transition: var(--transition);
+    border: 2px dashed var(--border-color);
 }
 
 .drag-item:active {
@@ -1189,23 +1187,47 @@ footer {
     transform: scale(0.95);
 }
 
+/* Specific Permit Colors */
+.permit-vip {
+    background-color: #2c2f33;
+    color: #ffd700;
+    border-color: #ffd700;
+}
+.permit-std {
+    background-color: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+}
+.permit-ev {
+    background-color: #3b82f6;
+    color: #ffffff;
+    border-color: #3b82f6;
+}
+
 .drop-container {
-    width: 45%;
+    width: 100%;
 }
 
 .drop-zone {
     background-color: var(--bg-app);
     border: 2px dashed var(--border-color);
-    padding: 2.5rem 1rem;
+    padding: 1.5rem 0.5rem;
     border-radius: var(--radius);
     text-align: center;
     color: var(--text-secondary);
     font-weight: 600;
     transition: var(--transition);
-    min-height: 120px;
+    min-height: 100px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 0.5rem;
+}
+
+.slot-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
 }
 
 .drop-zone.drag-over {
@@ -1213,4 +1235,24 @@ footer {
     border-color: var(--primary);
     color: var(--primary);
     transform: scale(1.02);
+}
+
+/* Filled State */
+.drop-zone.filled {
+    border-style: solid;
+}
+.drop-zone.filled-vip {
+    background-color: rgba(255, 215, 0, 0.1);
+    border-color: #ffd700;
+    color: #ffd700;
+}
+.drop-zone.filled-std {
+    background-color: var(--primary-glow);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.drop-zone.filled-ev {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+    color: #3b82f6;
 }

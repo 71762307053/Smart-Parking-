@@ -125,6 +125,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>${text}</p>
             </div>
         `;
+
+        // Click to open details functionality
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', () => {
+            alert(`Notification Details:\n\n${text}\n\nTimestamp: ${new Date().toLocaleTimeString()}`);
+        });
+
         notifyList.insertBefore(item, notifyList.firstChild);
         
         unreadCount++;
@@ -460,7 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ASSIGNMENT 4: Drag and Drop Implementation
     // ==========================================
     const dragItems = document.querySelectorAll('.drag-item');
-    const dropZone = document.getElementById('drop-zone');
+    const dropZones = document.querySelectorAll('.drop-zone');
 
     dragItems.forEach(item => {
         item.addEventListener('dragstart', (e) => {
@@ -469,80 +476,105 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault(); // Necessary to allow dropping
-        e.dataTransfer.dropEffect = 'move';
-        dropZone.classList.add('drag-over');
-    });
+    dropZones.forEach(zone => {
+        zone.addEventListener('dragover', (e) => {
+            e.preventDefault(); // allow dropping
+            e.dataTransfer.dropEffect = 'move';
+            zone.classList.add('drag-over');
+        });
 
-    dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('drag-over');
-    });
+        zone.addEventListener('dragleave', () => {
+            zone.classList.remove('drag-over');
+        });
 
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('drag-over');
-        const id = e.dataTransfer.getData('text/plain');
-        const draggableElement = document.getElementById(id);
-        
-        if (draggableElement) {
-            // Append the dragged item to the drop zone
-            dropZone.innerHTML = ''; // Clear the "Drop Permit Here" text
-            dropZone.appendChild(draggableElement);
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.classList.remove('drag-over');
             
-            // Add a visual success notification
-            addNotification(`Successfully assigned ${draggableElement.innerText.trim()} to Slot A-1!`, 'success');
-        }
+            const id = e.dataTransfer.getData('text/plain');
+            const draggableElement = document.getElementById(id);
+            
+            if (draggableElement) {
+                // Clear existing content in the zone
+                zone.innerHTML = '';
+                zone.appendChild(draggableElement);
+                
+                // Remove any previous filled classes
+                zone.classList.remove('filled', 'filled-vip', 'filled-std', 'filled-ev');
+                zone.classList.add('filled');
+                
+                // Add specific styling based on permit type
+                if (id === 'permit-vip') {
+                    zone.classList.add('filled-vip');
+                } else if (id === 'permit-std') {
+                    zone.classList.add('filled-std');
+                } else if (id === 'permit-ev') {
+                    zone.classList.add('filled-ev');
+                }
+                
+                const slotName = zone.getAttribute('data-slot');
+                addNotification(`Successfully assigned ${draggableElement.innerText.trim()} to Slot ${slotName}!`, 'success');
+            }
+        });
     });
 
     // ==========================================
-    // ASSIGNMENT 4: Web Storage Implementation
+    // ASSIGNMENT 4: Web Storage Implementation (Enhanced)
     // ==========================================
-    const btnSaveData = document.getElementById('btn-save-data');
-    const btnRetrieveData = document.getElementById('btn-retrieve-data');
-    const btnClearData = document.getElementById('btn-clear-data');
-    const localInput = document.getElementById('local-data');
-    const sessionInput = document.getElementById('session-data');
-    const storageOutput = document.getElementById('storage-output');
+    const btnSave = document.getElementById('btn-save');
+    const btnRetrieve = document.getElementById('btn-retrieve');
+    const btnUpdate = document.getElementById('btn-update');
+    const btnClear = document.getElementById('btn-clear');
+    
+    const inpDriver = document.getElementById('driver-name');
+    const inpVehicle = document.getElementById('vehicle-number');
+    const inpZone = document.getElementById('preferred-zone');
+    const inpSlot = document.getElementById('current-slot');
+    const inpSession = document.getElementById('session-id');
+    
+    const displayCard = document.getElementById('data-display-card');
+    
+    const saveToStorage = (isUpdate = false) => {
+        // Local Storage
+        if(inpDriver.value) localStorage.setItem('driverName', inpDriver.value);
+        if(inpVehicle.value) localStorage.setItem('vehicleNum', inpVehicle.value);
+        if(inpZone.value) localStorage.setItem('prefZone', inpZone.value);
+        
+        // Session Storage
+        if(inpSlot.value) sessionStorage.setItem('currSlot', inpSlot.value);
+        if(inpSession.value) sessionStorage.setItem('sessionID', inpSession.value);
+        
+        if (isUpdate) {
+            addNotification("User data updated in Web Storage.", "info");
+        } else {
+            addNotification("User data saved successfully!", "success");
+            // Clear inputs after save
+            inpDriver.value = ''; inpVehicle.value = ''; inpSlot.value = ''; inpSession.value = '';
+        }
+    };
 
-    // Save Data
-    btnSaveData.addEventListener('click', () => {
-        const localVal = localInput.value.trim();
-        const sessionVal = sessionInput.value.trim();
+    btnSave.addEventListener('click', () => saveToStorage(false));
+    btnUpdate.addEventListener('click', () => saveToStorage(true));
+
+    btnRetrieve.addEventListener('click', () => {
+        document.getElementById('display-driver').innerText = localStorage.getItem('driverName') || 'N/A';
+        document.getElementById('display-vehicle').innerText = localStorage.getItem('vehicleNum') || 'N/A';
+        document.getElementById('display-zone').innerText = localStorage.getItem('prefZone') || 'N/A';
         
-        if(localVal) {
-            localStorage.setItem('preferredZone', localVal);
-        }
-        if(sessionVal) {
-            sessionStorage.setItem('sessionTag', sessionVal);
-        }
+        document.getElementById('display-slot').innerText = sessionStorage.getItem('currSlot') || 'N/A';
+        document.getElementById('display-session').innerText = sessionStorage.getItem('sessionID') || 'N/A';
         
-        addNotification("User preferences saved to Web Storage.", "success");
-        localInput.value = '';
-        sessionInput.value = '';
+        displayCard.style.display = 'block';
     });
 
-    // Retrieve Data
-    btnRetrieveData.addEventListener('click', () => {
-        const savedLocal = localStorage.getItem('preferredZone') || 'None Set';
-        const savedSession = sessionStorage.getItem('sessionTag') || 'None Set';
-        
-        storageOutput.innerHTML = `
-            <strong>Retrieved Data:</strong><br>
-            <span style="color: var(--primary);">Local Storage (Preferred Zone):</span> ${savedLocal}<br>
-            <span style="color: #3b82f6;">Session Storage (Session Tag):</span> ${savedSession}
-        `;
-        storageOutput.style.display = 'block';
-    });
-
-    // Clear Data
-    btnClearData.addEventListener('click', () => {
-        localStorage.removeItem('preferredZone');
-        sessionStorage.removeItem('sessionTag');
-        
-        storageOutput.innerHTML = `<strong>Data Cleared successfully!</strong>`;
-        setTimeout(() => { storageOutput.style.display = 'none'; }, 2000);
-        addNotification("Web Storage data has been cleared.", "info");
+    btnClear.addEventListener('click', () => {
+        if(confirm("Are you sure you want to clear all stored data?")) {
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            displayCard.style.display = 'none';
+            addNotification("All Web Storage data cleared.", "warning");
+        }
     });
 
     // ==========================================
